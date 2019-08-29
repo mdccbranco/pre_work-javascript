@@ -179,7 +179,7 @@ function command(rover, orders) {
     }
 
     for (let i = 0; i < orders.length; i++) {
-        let order = orders[i];
+        let order = orders[i].toLowerCase();
         switch (order) {
             case "f":
                 moveForward(rover);
@@ -328,5 +328,5 @@ grid[marsRoverI.y][marsRoverI.x] = 1;
 grid[marsRoverII.y][marsRoverII.x] = 1;
 
 //command list
-command(marsRoverI, "b");
+command(marsRoverI, "f");
 command(marsRoverII, "rf");
