@@ -17,7 +17,7 @@ let marsRoverII = {
 var stop = false;
 
 var grid = [
-    [0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
     [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -82,15 +82,17 @@ function moveForward(rover) {
                     break;
                 case 1:
                     console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
                     console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
             return true;
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
-            return false;
+            stop = true;
         }
     } else if (rover.direction === "R") {
         if (rover.x < 9) {
@@ -106,14 +108,16 @@ function moveForward(rover) {
                     break;
                 case 1:
                     console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
                     console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
-            return false;
+            stop = true;
         }
     } else if (rover.direction === "S") {
         if (rover.y < 9) {
@@ -129,14 +133,16 @@ function moveForward(rover) {
                     break;
                 case 1:
                     console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
                     console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
-            return false;
+            stop = true;
         }
     } else if (rover.direction === "W") {
         if (rover.x > 0) {
@@ -152,14 +158,16 @@ function moveForward(rover) {
                     break;
                 case 1:
                     console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
                     console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
-            return false;
+            stop = true;
         }
     }
     grid[rover.y][rover.x] = 1;
@@ -183,6 +191,9 @@ function command(rover, orders) {
         switch (order) {
             case "f":
                 moveForward(rover);
+                grid[rover.y][rover.x] = 1;
+                if(stop)
+                    i = orders.length;            
                 break;
             case "r":
                 turnRight(rover);
@@ -193,16 +204,9 @@ function command(rover, orders) {
             case "b":
                 moveBackward(rover);
                 break;
-            default:
-                console.log("Command must be f, b, r, or l.")
-                i = orders.length;
-                break;
         }
-        grid[rover.y][rover.x] = 1;
+        
 
-        if(stop){
-            i = orders.length + 1;
-        }
     }
 
     if (rover.travelLog.length === 0) {
@@ -328,5 +332,5 @@ grid[marsRoverI.y][marsRoverI.x] = 1;
 grid[marsRoverII.y][marsRoverII.x] = 1;
 
 //command list
-command(marsRoverI, "f");
+command(marsRoverI, "rfffffffffffffffffff");
 command(marsRoverII, "rf");
