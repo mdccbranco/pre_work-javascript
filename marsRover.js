@@ -1,4 +1,5 @@
 let marsRoverI = {
+    name: 1,
     direction: "N",
     x: 0,
     y: 0,
@@ -6,14 +7,17 @@ let marsRoverI = {
 };
 
 let marsRoverII = {
+    name: 2,
     direction: "N",
     x: 1,
     y: 4,
     travelLog: []
 };
 
+var stop = false;
+
 var grid = [
-    [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
     [0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
     [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -25,19 +29,8 @@ var grid = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-//console.log(grid.length);
-
-
-grid[marsRoverI.y][marsRoverI.x] = 1;
-grid[marsRoverII.y][marsRoverII.x] = 1;
-// console.log(grid);
-command(marsRoverI, "r");
-
-// console.log(`x:${rover.x} y:${rover.y}`);
-
-// ======================
 function turnLeft(rover) {
-    console.log("turnLeft was called!");
+    console.log(" turnLeft was called!");
     switch (rover.direction) {
         case "N":
             rover.direction = "W";
@@ -55,7 +48,7 @@ function turnLeft(rover) {
 }
 
 function turnRight(rover) {
-    console.log("turnRight was called!");
+    console.log(" turnRight was called!");
     switch (rover.direction) {
         case "N":
             rover.direction = "R";
@@ -112,10 +105,10 @@ function moveForward(rover) {
                     console.log("Moved forward east.");
                     break;
                 case 1:
-                        console.log("I can`t go. Found another Rover buddy.");
+                    console.log("I can`t go. Found another Rover buddy.");
                     break;
                 case 2:
-                        console.log("I can`t go. There is an obstacle in my direction.");
+                    console.log("I can`t go. There is an obstacle in my direction.");
                     break;
             }
         } else {
@@ -138,7 +131,7 @@ function moveForward(rover) {
                     console.log("I can`t go. Found another Rover buddy.");
                     break;
                 case 2:
-                        console.log("I can`t go. There is an obstacle in my direction.");
+                    console.log("I can`t go. There is an obstacle in my direction.");
                     break;
             }
         } else {
@@ -158,10 +151,10 @@ function moveForward(rover) {
                     console.log("Moved forward west.");
                     break;
                 case 1:
-                        console.log("I can`t go. Found another Rover buddy.");
+                    console.log("I can`t go. Found another Rover buddy.");
                     break;
                 case 2:
-                        console.log("I can`t go. There is an obstacle in my direction.");
+                    console.log("I can`t go. There is an obstacle in my direction.");
                     break;
             }
         } else {
@@ -173,6 +166,9 @@ function moveForward(rover) {
 }
 
 function command(rover, orders) {
+    stop = false;
+    console.log(`Rover ${rover.name}:`);
+
     grid[rover.y][rover.x] = 0;
     for (let i = 0; i < orders.length; i++) {
         let order = orders[i].toLowerCase();
@@ -203,16 +199,20 @@ function command(rover, orders) {
                 break;
         }
         grid[rover.y][rover.x] = 1;
+
+        if(stop){
+            i = orders.length + 1;
+        }
     }
-    
-    if(rover.travelLog.length === 0){
+
+    if (rover.travelLog.length === 0) {
         console.log("I haven't moved yet");
     } else {
-    console.log(`Travel log - ${rover}:`);
-    for(let i=0; i < rover.travelLog.length; i++){
-        console.log(`(${rover.travelLog[i].x},${rover.travelLog[i].y})`);    
+        console.log("Travel log: ")
+        for (let i = 0; i < rover.travelLog.length; i++) {
+            console.log(`(${rover.travelLog[i].x},${rover.travelLog[i].y})`);
+        }
     }
-}
     console.log(`I'm here : (${rover.x},${rover.y})`);
 }
 
@@ -229,17 +229,20 @@ function moveBackward(rover) {
                     };
                     rover.travelLog.push(lastPosition);
                     rover.y++;
-                    console.log("Moved backward north.");
-                    break;
+                    console.log("Moved backward south.");
+                    return true;
                 case 1:
-                        console.log("I can`t go. Found another Rover buddy.");
+                    console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
-                        console.log("I can`t go. There is an obstacle in my direction.");
+                    console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
+            stop = true;
         }
     } else if (rover.direction === "R") {
         if (rover.x > 0) {
@@ -251,17 +254,20 @@ function moveBackward(rover) {
                     };
                     rover.travelLog.push(lastPosition);
                     rover.x--;
-                    console.log("Moved backward east.");
+                    console.log("Moved backward west.");
                     break;
                 case 1:
-                        console.log("I can`t go. Found another Rover buddy.");
+                    console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
-                        console.log("I can`t go. There is an obstacle in my direction.");
+                    console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
+            stop = true;
         }
     } else if (rover.direction === "S") {
         if (rover.y > 0) {
@@ -273,17 +279,20 @@ function moveBackward(rover) {
                     };
                     rover.travelLog.push(lastPosition);
                     rover.y--;
-                    console.log("Moved backward south.");
+                    console.log("Moved backward north.");
                     break;
                 case 1:
-                        console.log("I can`t go. Found another Rover buddy.");
+                    console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
-                        console.log("I can`t go. There is an obstacle in my direction.");
+                    console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
+            stop = true;
         }
     } else if (rover.direction === "W") {
         if (rover.x < 9) {
@@ -295,18 +304,29 @@ function moveBackward(rover) {
                     };
                     rover.travelLog.push(lastPosition);
                     rover.x++;
-                    console.log("Moved backward west.");
+                    console.log("Moved backward east.");
                     break;
                 case 1:
-                        console.log("I can`t go. Found another Rover buddy.");
+                    console.log("I can`t go. Found another Rover buddy.");
+                    stop = true;
                     break;
                 case 2:
-                        console.log("I can`t go. There is an obstacle in my direction.");
+                    console.log("I can`t go. There is an obstacle in my direction.");
+                    stop = true;
                     break;
             }
         } else {
             console.log("I can`t go. The next step is outside my grid. I don`t wanna be lost.");
+            stop = true;
         }
         grid[rover.y][rover.x] = 1;
     }
 }
+
+//Put rovers on the grid
+grid[marsRoverI.y][marsRoverI.x] = 1;
+grid[marsRoverII.y][marsRoverII.x] = 1;
+
+//command list
+command(marsRoverI, "b");
+command(marsRoverII, "rf");
