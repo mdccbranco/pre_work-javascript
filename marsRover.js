@@ -17,7 +17,7 @@ let marsRoverII = {
 var stop = false;
 
 var grid = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
     [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -192,20 +192,29 @@ function command(rover, orders) {
             case "f":
                 moveForward(rover);
                 grid[rover.y][rover.x] = 1;
-                if(stop)
-                    i = orders.length;            
+                if (stop)
+                    i = orders.length;
                 break;
             case "r":
                 turnRight(rover);
+                grid[rover.y][rover.x] = 1;
+                if (stop)
+                    i = orders.length;
                 break;
             case "l": // up
                 turnLeft(rover);
+                grid[rover.y][rover.x] = 1;
+                if (stop)
+                    i = orders.length;
                 break;
             case "b":
                 moveBackward(rover);
+                grid[rover.y][rover.x] = 1;
+                if (stop)
+                    i = orders.length;
                 break;
         }
-        
+
 
     }
 
@@ -332,5 +341,5 @@ grid[marsRoverI.y][marsRoverI.x] = 1;
 grid[marsRoverII.y][marsRoverII.x] = 1;
 
 //command list
-command(marsRoverI, "rfffffffffffffffffff");
-command(marsRoverII, "rf");
+// command(marsRoverI, "rfffffffffffffffffff");
+command(marsRoverI, "bbbbbbbbbbbbbbbbbb");
